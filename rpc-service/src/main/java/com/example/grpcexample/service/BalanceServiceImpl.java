@@ -2,19 +2,18 @@ package com.example.grpcexample.service;
 
 import com.example.grpcexample.*;
 import com.example.grpcexample.repository.BalanceRepository;
-import com.example.grpcexample.statistic.CounterGet;
-import com.example.grpcexample.statistic.CounterPost;
+import com.example.grpcexample.statistics.CounterGet;
+import com.example.grpcexample.statistics.CounterPost;
 import io.grpc.stub.StreamObserver;
+import lombok.extern.log4j.Log4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-
+@Log4j
 @GrpcService
 public class BalanceServiceImpl extends BalanceServiceGrpc.BalanceServiceImplBase {
 
@@ -37,7 +36,7 @@ public class BalanceServiceImpl extends BalanceServiceGrpc.BalanceServiceImplBas
         } finally {
             lock.unlock();
         }
-        System.out.println("Handler state: " + rpcHandler);
+//        log.info("Handler state: " + rpcHandler);
     }
 
     public void handleUpdate(Long key) {
@@ -56,6 +55,7 @@ public class BalanceServiceImpl extends BalanceServiceGrpc.BalanceServiceImplBas
         this.balanceRepository = balanceRepository;
         this.rpcHandler = rpcHandler;
     }
+
     @Async
     @Override
     @CounterGet
@@ -70,6 +70,7 @@ public class BalanceServiceImpl extends BalanceServiceGrpc.BalanceServiceImplBas
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
+
     @Async
     @Override
     @CounterPost

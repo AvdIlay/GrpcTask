@@ -1,8 +1,6 @@
 package com.example.grpcexample.entity;
 
 import lombok.*;
-import org.springframework.cache.annotation.EnableCaching;
-
 import javax.persistence.*;
 
 @Entity

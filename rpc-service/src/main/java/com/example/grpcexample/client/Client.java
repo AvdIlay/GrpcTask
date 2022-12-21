@@ -4,11 +4,10 @@ import com.example.grpcexample.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import lombok.extern.log4j.Log4j;
-import org.apache.log4j.Logger;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+
 @Log4j
 public class Client {
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -16,8 +15,10 @@ public class Client {
         ArrayList<Long> readIdList = new ArrayList<>();
         readIdList.add(1L);
         readIdList.add(2L);
+
         Long readQuota = 50L;
         Long writeQuota = 50L;
+
         ArrayList<Long> writeIdList = new ArrayList<>();
         writeIdList.add(1L);
         writeIdList.add(2L);
@@ -26,16 +27,16 @@ public class Client {
 
         BalanceServiceGrpc.BalanceServiceBlockingStub stub = getRpcChannel();
         for (int i = 0; i < threadCount; i++) {
-            int finalI = i;
+            int numberThread = i;
             new Thread(() -> {
                 while (true) {
-                    log.info("number 3td " + finalI);
+                    log.info("number 3td " + numberThread);
                     double readProbability = (double) readQuota / (double) (readQuota + writeQuota);
 
                     if (ThreadLocalRandom.current().nextDouble() < readProbability) {
-                        log.info("Take getBalance " + getBalance(stub, (randomFromList(readIdList))));
+                        getBalance(stub, (randomFromList(readIdList)));
                     } else {
-                        log.info("Take changeBalance " + changeBalance(stub, randomFromList(writeIdList), 1L));
+                        changeBalance(stub, randomFromList(writeIdList), 1L);
                     }
                 }
             }).start();
