@@ -47,7 +47,7 @@ public class Statistic {
 
     @Scheduled(fixedRateString = "5000")
     public void statisticOutAllPut(){
-        log.info("Count 2methods  = {}.", countChangeBalance.get() + countGetBalance.get());
+        log.info("Count 2methods = {}.", countChangeBalance.get() + countGetBalance.get());
         countGetBalance.set(0);
         countChangeBalance.set(0);
     }
