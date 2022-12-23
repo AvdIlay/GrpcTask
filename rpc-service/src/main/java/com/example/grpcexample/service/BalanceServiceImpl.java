@@ -2,8 +2,8 @@ package com.example.grpcexample.service;
 
 import com.example.grpcexample.*;
 import com.example.grpcexample.repository.BalanceRepository;
-import com.example.grpcexample.statistics.CounterGet;
-import com.example.grpcexample.statistics.CounterPost;
+import com.example.grpcexample.statistics.CounterChangeBalance;
+import com.example.grpcexample.statistics.CounterGetBalance;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.log4j.Log4j;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -58,7 +58,7 @@ public class BalanceServiceImpl extends BalanceServiceGrpc.BalanceServiceImplBas
 
     @Async
     @Override
-    @CounterGet
+    @CounterGetBalance
     public void getBalance(GetBalanceRequest request, StreamObserver<GetBalanceResponse> responseObserver) {
         handleUpdate(request.getUserId());
         Long balance = balanceRepository.getBalance(request.getUserId()).orElse(0L);
@@ -73,7 +73,7 @@ public class BalanceServiceImpl extends BalanceServiceGrpc.BalanceServiceImplBas
 
     @Async
     @Override
-    @CounterPost
+    @CounterChangeBalance
     public void changeBalance(ChangeBalanceRequest request, StreamObserver<ChangeBalanceResponse> responseObserver) {
         handleRequest(request.getUserId(), request.getAmount());
 

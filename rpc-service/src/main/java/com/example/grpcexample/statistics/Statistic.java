@@ -17,31 +17,38 @@ public class Statistic {
     @Value("10000")
     private int inMillisecond;
 
-    private final AtomicInteger countGet = new AtomicInteger();
-    private final AtomicInteger countPost = new AtomicInteger();
+    private final AtomicInteger countGetBalance = new AtomicInteger();
+    private final AtomicInteger countChangeBalance = new AtomicInteger();
 
-    @Around("@annotation(CounterGet)")
+    @Around("@annotation(CounterGetBalance)")
     public Object incrementGet(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         try {
             return proceedingJoinPoint.proceed();
         } finally {
-            countGet.incrementAndGet();
+            countGetBalance.incrementAndGet();
         }
     }
 
-    @Around("@annotation(CounterPost)")
+    @Around("@annotation(CounterChangeBalance)")
     public Object incrementPost(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         try {
             return proceedingJoinPoint.proceed();
         } finally {
-            countPost.incrementAndGet();
+            countChangeBalance.incrementAndGet();
         }
     }
 
     @Scheduled(fixedRateString = "10000")
     public void statisticOutput() {
-        log.info("Count getBalance = {}. Count changeBalance = {}. In {} seconds", countGet.get(), countPost.get(), inMillisecond / 1000);
-        countGet.set(0);
-        countPost.set(0);
+        log.info("Count getBalance = {}. Count changeBalance = {}. In {} seconds", countGetBalance.get(), countChangeBalance.get(), inMillisecond / 1000);
+        countGetBalance.set(0);
+        countChangeBalance.set(0);
+    }
+
+    @Scheduled(fixedRateString = "5000")
+    public void statisticOutAllPut(){
+        log.info("Count 2methods  = {}.", countChangeBalance.get() + countGetBalance.get());
+        countGetBalance.set(0);
+        countChangeBalance.set(0);
     }
 }
