@@ -13,6 +13,7 @@ target/
 
 
 
+
 ### STS ###
 .apt_generated
 .classpath
@@ -41,3 +42,6 @@ build/
 
 ### VS Code ###
 .vscode/
+/rpc-client/start.sh
+/rpc-client/log/
+/rpc-service/log/

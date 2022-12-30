@@ -1,4 +1,4 @@
-package com.example.grpcexample.client;
+package com.example.client;
 
 import com.example.grpcexample.*;
 import io.grpc.ManagedChannel;
